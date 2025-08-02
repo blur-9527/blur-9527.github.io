@@ -458,12 +458,10 @@
     </div>
 
     <script>
-        // 工具库数据结构示例（用于本地测试）
-        const mockData = {};
-
         class ToolLibrary {
             constructor() {
                 this.allTools = [];
+                this.categories = [];
                 this.currentCategory = "";
                 this.filteredTools = [];
                 this.init();
@@ -481,7 +479,7 @@
                     console.error('加载数据失败:', error);
                     this.showError('无法加载工具数据。请确保 tools.json 文件存在且格式正确。');
                     // 使用默认数据
-                    this.processData(mockData);
+                    this.processData(this.getDefaultData());
                     this.renderTabs();
                     this.switchCategory(this.currentCategory);
                     this.setupEventListeners();
@@ -497,15 +495,158 @@
                     const data = await response.json();
                     return data;
                 } catch (error) {
-                    console.warn('无法加载 tools.json，使用默认数据:', error);
-                    return mockData;
+                    console.warn('无法加载 tools.json:', error);
+                    throw error;
                 }
+            }
+
+            getDefaultData() {
+                return {
+                    "开发工具": [
+                        {
+                            "name": "代码格式化",
+                            "description": "在线格式化HTML、CSS、JavaScript代码，支持多种语言语法高亮",
+                            "link": "tools/code-formatter.html",
+                            "icon": "💻"
+                        },
+                        {
+                            "name": "JSON查看器",
+                            "description": "可视化查看和编辑JSON数据，支持树形结构展开和折叠",
+                            "link": "tools/json-viewer.html",
+                            "icon": "📊"
+                        },
+                        {
+                            "name": "正则表达式测试",
+                            "description": "在线测试和调试正则表达式，实时预览匹配结果",
+                            "link": "tools/regex-tester.html",
+                            "icon": "🔍"
+                        },
+                        {
+                            "name": "API测试工具",
+                            "description": "测试RESTful API接口，支持GET、POST、PUT、DELETE方法",
+                            "link": "tools/api-tester.html",
+                            "icon": "📡"
+                        },
+                        {
+                            "name": "颜色转换器",
+                            "description": "在HEX、RGB、HSL等颜色格式之间进行转换",
+                            "link": "tools/color-converter.html",
+                            "icon": "🎨"
+                        }
+                    ],
+                    "图像处理": [
+                        {
+                            "name": "图片压缩",
+                            "description": "在线压缩图片大小，保持质量，支持JPG、PNG、WEBP格式",
+                            "link": "tools/image-compressor.html",
+                            "icon": "🖼️"
+                        },
+                        {
+                            "name": "颜色提取器",
+                            "description": "从图片中提取主要颜色，生成调色板",
+                            "link": "tools/color-extractor.html",
+                            "icon": "🎨"
+                        },
+                        {
+                            "name": "图片转Base64",
+                            "description": "将图片转换为Base64编码，方便嵌入代码中",
+                            "link": "tools/image-to-base64.html",
+                            "icon": "🔗"
+                        },
+                        {
+                            "name": "二维码生成",
+                            "description": "将文本、链接等信息生成二维码，支持自定义样式",
+                            "link": "tools/qr-code-generator.html",
+                            "icon": "📱"
+                        }
+                    ],
+                    "文本工具": [
+                        {
+                            "name": "文本对比",
+                            "description": "比较两段文本的差异，高亮显示不同之处",
+                            "link": "tools/text-compare.html",
+                            "icon": "📝"
+                        },
+                        {
+                            "name": "字符统计",
+                            "description": "统计文本中的字符、单词、行数和阅读时间",
+                            "link": "tools/character-counter.html",
+                            "icon": "🔢"
+                        },
+                        {
+                            "name": "文本转语音",
+                            "description": "将文本转换为语音播放，支持多种语言和声音",
+                            "link": "tools/text-to-speech.html",
+                            "icon": "🗣️"
+                        },
+                        {
+                            "name": "Markdown预览",
+                            "description": "实时预览Markdown语法渲染效果",
+                            "link": "tools/markdown-preview.html",
+                            "icon": "📄"
+                        }
+                    ],
+                    "转换工具": [
+                        {
+                            "name": "单位转换",
+                            "description": "长度、重量、温度、速度等单位转换，支持100+单位",
+                            "link": "tools/unit-converter.html",
+                            "icon": "🔄"
+                        },
+                        {
+                            "name": "时间转换",
+                            "description": "时间戳与日期格式相互转换，支持多种时区",
+                            "link": "tools/timestamp-converter.html",
+                            "icon": "⏰"
+                        },
+                        {
+                            "name": "进制转换",
+                            "description": "在二进制、八进制、十进制、十六进制之间转换",
+                            "link": "tools/base-converter.html",
+                            "icon": "🧮"
+                        },
+                        {
+                            "name": "文件编码转换",
+                            "description": "在UTF-8、GBK、ISO-8859-1等编码格式之间转换",
+                            "link": "tools/encoding-converter.html",
+                            "icon": "📁"
+                        }
+                    ],
+                    "实用工具": [
+                        {
+                            "name": "密码生成器",
+                            "description": "生成安全的随机密码，可自定义长度和字符类型",
+                            "link": "tools/password-generator.html",
+                            "icon": "🔐"
+                        },
+                        {
+                            "name": "计算器",
+                            "description": "支持基本运算、科学计算和编程计算",
+                            "link": "tools/calculator.html",
+                            "icon": "🧮"
+                        },
+                        {
+                            "name": "随机数生成",
+                            "description": "生成指定范围内的随机数，支持批量生成",
+                            "link": "tools/random-number.html",
+                            "icon": "🎲"
+                        },
+                        {
+                            "name": "天气查询",
+                            "description": "查询全球城市天气信息，支持未来预报",
+                            "link": "tools/weather.html",
+                            "icon": "🌤️"
+                        }
+                    ]
+                };
             }
 
             processData(data) {
                 this.allTools = [];
+                this.categories = Object.keys(data);
                 
-                Object.keys(data).forEach(category => {
+                // 构建工具列表
+                this.categories.forEach(category => {
                     data[category].forEach(tool => {
                         this.allTools.push({
                             ...tool,
@@ -514,14 +655,25 @@
                     });
                 });
                 
-                this.currentCategory = Object.keys(data)[0] || "";
+                // 设置默认选中的分类
+                this.currentCategory = this.categories[0] || "";
             }
 
             renderTabs() {
                 const tabHeader = document.getElementById('tabHeader');
                 tabHeader.innerHTML = '';
 
-                Object.keys(mockData).forEach(category => {
+                if (this.categories.length === 0) {
+                    const noTabs = document.createElement('div');
+                    noTabs.textContent = '暂无工具分类';
+                    noTabs.style.padding = '20px';
+                    noTabs.style.color = '#64748b';
+                    noTabs.style.fontStyle = 'italic';
+                    tabHeader.appendChild(noTabs);
+                    return;
+                }
+
+                this.categories.forEach(category => {
                     const button = document.createElement('button');
                     button.className = 'tab-button';
                     button.textContent = category;
@@ -530,8 +682,9 @@
                 });
 
                 // 激活第一个标签
-                if (tabHeader.firstChild) {
-                    tabHeader.firstChild.classList.add('active');
+                const firstButton = tabHeader.querySelector('.tab-button');
+                if (firstButton) {
+                    firstButton.classList.add('active');
                 }
             }
 
@@ -629,10 +782,10 @@
                         searchClear.style.visibility = 'hidden';
                     }
                     
-                    if (searchTerm === '') {
+                    if (this.currentCategory && searchTerm === '') {
                         // 如果搜索框为空，显示当前类别的所有工具
                         this.filteredTools = this.allTools.filter(tool => tool.category === this.currentCategory);
-                    } else {
+                    } else if (this.currentCategory) {
                         // 搜索所有匹配的工具
                         this.filteredTools = this.allTools.filter(tool => 
                             (tool.name.toLowerCase().includes(searchTerm) || 
@@ -650,8 +803,10 @@
                     searchInput.value = '';
                     searchClear.style.opacity = '0';
                     searchClear.style.visibility = 'hidden';
-                    this.filteredTools = this.allTools.filter(tool => tool.category === this.currentCategory);
-                    this.displayTools(this.filteredTools);
+                    if (this.currentCategory) {
+                        this.filteredTools = this.allTools.filter(tool => tool.category === this.currentCategory);
+                        this.displayTools(this.filteredTools);
+                    }
                     searchInput.focus();
                 });
 
@@ -660,8 +815,10 @@
                     const searchTerm = searchInput.value.trim();
                     if (searchTerm === '') {
                         const searchIcon = document.querySelector('.search-icon');
-                        searchIcon.style.opacity = '0';
-                        searchIcon.style.visibility = 'hidden';
+                        if (searchIcon) {
+                            searchIcon.style.opacity = '0';
+                            searchIcon.style.visibility = 'hidden';
+                        }
                     }
                 });
 
@@ -670,8 +827,10 @@
                     const searchTerm = searchInput.value.trim();
                     if (searchTerm === '') {
                         const searchIcon = document.querySelector('.search-icon');
-                        searchIcon.style.opacity = '1';
-                        searchIcon.style.visibility = 'visible';
+                        if (searchIcon) {
+                            searchIcon.style.opacity = '1';
+                            searchIcon.style.visibility = 'visible';
+                        }
                     }
                 });
             }
