@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具库 | ToolHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 20%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .search-container {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 24px;
+            padding-left: 60px;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: var(--surface);
+            box-shadow: var(--shadow);
+            font-weight: 500;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            font-size: 1.2rem;
+        }
+
+        .search-input:not(:placeholder-shown) ~ .search-clear {
+            opacity: 1;
+        }
+
+        .tabs-container {
+            margin-bottom: 30px;
+        }
+
+        .tab-header {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 12px 0;
+            margin-bottom: 30px;
+            background-color: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .tab-button {
+            padding: 14px 28px;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            border-radius: 10px;
+        }
+
+        .tab-button:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .tab-button:hover::before {
+            opacity: 0.05;
+        }
+
+        .tab-button.active {
+            color: var(--primary);
+            border-color: var(--primary);
+            font-weight: 600;
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active::before {
+            opacity: 0.1;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 10px;
+        }
+
+        .tool-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 28px 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(45deg, var(--primary-light), var(--secondary));
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-color: transparent;
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .tool-icon {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        .tool-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .tool-category {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 6px;
+            margin-top: auto;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+        }
+
+        .error {
+            background: white;
+            color: #dc2626;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #fee;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            opacity: 0.3;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .tool-card {
+                padding: 24px 20px;
+            }
+
+            .tool-icon {
+                font-size: 2.4rem;
+                width: 60px;
+                height: 60px;
+            }
+
+            .tool-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* 滚动条样式 */
+        .tab-header::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .tab-header::-webkit-scrollbar-track {
+            background: rgba(226, 232, 240, 0.3);
+            border-radius: 4px;
+        }
+
+        .tab-header::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        .tab-header::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+            opacity: 0.8;
+        }
+
+        /* 动画效果 */
+        .tools-grid > * {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .tools-grid > *:nth-child(1) { animation-delay: 0.1s; }
+        .tools-grid > *:nth-child(2) { animation-delay: 0.2s; }
+        .tools-grid > *:nth-child(3) { animation-delay: 0.3s; }
+        .tools-grid > *:nth-child(4) { animation-delay: 0.4s; }
+        .tools-grid > *:nth-child(5) { animation-delay: 0.5s; }
+        .tools-grid > *:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-toolbox logo-icon"></i>
+            </div>
+            <h1>ToolHub</h1>
+            <p class="subtitle">一个现代化的工具集合平台，提供各种实用工具来提升您的工作效率</p>
+        </header>
+
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索您需要的工具..." autocomplete="off">
+                <button class="search-clear" id="searchClear">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tab-header" id="tabHeader">
+                <!-- Tab buttons will be inserted here -->
+            </div>
+            
+            <div class="tools-grid" id="toolsGrid">
+                <!-- Tools will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 工具库数据结构示例（用于本地测试）
+        const mockData = {};
+
+        class ToolLibrary {
+            constructor() {
+                this.allTools = [];
+                this.currentCategory = "";
+                this.filteredTools = [];
+                this.init();
+            }
+
+            async init() {
+                try {
+                    // 尝试从本地JSON文件加载数据
+                    const data = await this.loadData();
+                    this.processData(data);
+                    this.renderTabs();
+                    this.switchCategory(this.currentCategory);
+                    this.setupEventListeners();
+                } catch (error) {
+                    console.error('加载数据失败:', error);
+                    this.showError('无法加载工具数据。请确保 tools.json 文件存在且格式正确。');
+                    // 使用默认数据
+                    this.processData(mockData);
+                    this.renderTabs();
+                    this.switchCategory(this.currentCategory);
+                    this.setupEventListeners();
+                }
+            }
+
+            async loadData() {
+                try {
+                    const response = await fetch('tools.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.warn('无法加载 tools.json，使用默认数据:', error);
+                    return mockData;
+                }
+            }
+
+            processData(data) {
+                this.allTools = [];
+                
+                Object.keys(data).forEach(category => {
+                    data[category].forEach(tool => {
+                        this.allTools.push({
+                            ...tool,
+                            category: category
+                        });
+                    });
+                });
+                
+                this.currentCategory = Object.keys(data)[0] || "";
+            }
+
+            renderTabs() {
+                const tabHeader = document.getElementById('tabHeader');
+                tabHeader.innerHTML = '';
+
+                Object.keys(mockData).forEach(category => {
+                    const button = document.createElement('button');
+                    button.className = 'tab-button';
+                    button.textContent = category;
+                    button.onclick = () => this.switchCategory(category);
+                    tabHeader.appendChild(button);
+                });
+
+                // 激活第一个标签
+                if (tabHeader.firstChild) {
+                    tabHeader.firstChild.classList.add('active');
+                }
+            }
+
+            switchCategory(category) {
+                this.currentCategory = category;
+                
+                // 更新按钮状态
+                const buttons = document.querySelectorAll('.tab-button');
+                buttons.forEach(button => {
+                    if (button.textContent === category) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+
+                // 过滤当前类别的工具
+                this.filteredTools = this.allTools.filter(tool => tool.category === category);
+                
+                // 应用搜索过滤
+                const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+                if (searchTerm) {
+                    this.filteredTools = this.filteredTools.filter(tool => 
+                        tool.name.toLowerCase().includes(searchTerm) || 
+                        tool.description.toLowerCase().includes(searchTerm)
+                    );
+                }
+                
+                this.displayTools(this.filteredTools);
+            }
+
+            displayTools(tools) {
+                const toolsGrid = document.getElementById('toolsGrid');
+                toolsGrid.innerHTML = '';
+
+                if (tools.length === 0) {
+                    const noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.innerHTML = `
+                        <i class="fas fa-search"></i>
+                        <p>没有找到匹配的工具</p>
+                    `;
+                    toolsGrid.appendChild(noResults);
+                    return;
+                }
+
+                tools.forEach(tool => {
+                    const toolCard = this.createToolCard(tool);
+                    toolsGrid.appendChild(toolCard);
+                });
+            }
+
+            createToolCard(tool) {
+                const card = document.createElement('div');
+                card.className = 'tool-card';
+                card.onclick = () => window.open(tool.link, '_blank');
+
+                const icon = document.createElement('div');
+                icon.className = 'tool-icon';
+                icon.textContent = tool.icon || '🛠️';
+
+                const title = document.createElement('h3');
+                title.className = 'tool-title';
+                title.textContent = tool.name;
+
+                const description = document.createElement('p');
+                description.className = 'tool-description';
+                description.textContent = tool.description;
+
+                const category = document.createElement('span');
+                category.className = 'tool-category';
+                category.textContent = tool.category;
+
+                card.appendChild(icon);
+                card.appendChild(title);
+                card.appendChild(description);
+                card.appendChild(category);
+
+                return card;
+            }
+
+            setupEventListeners() {
+                const searchInput = document.getElementById('searchInput');
+                const searchClear = document.getElementById('searchClear');
+                
+                searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.trim().toLowerCase();
+                    
+                    // 显示或隐藏清除按钮
+                    searchClear.style.opacity = searchTerm ? '1' : '0';
+                    
+                    if (searchTerm === '') {
+                        // 如果搜索框为空，显示当前类别的所有工具
+                        this.filteredTools = this.allTools.filter(tool => tool.category === this.currentCategory);
+                    } else {
+                        // 搜索所有匹配的工具
+                        this.filteredTools = this.allTools.filter(tool => 
+                            (tool.name.toLowerCase().includes(searchTerm) || 
+                             tool.description.toLowerCase().includes(searchTerm)) &&
+                            tool.category === this.currentCategory
+                        );
+                    }
+                    
+                    this.displayTools(this.filteredTools);
+                });
+
+                // 清除搜索
+                searchClear.addEventListener('click', () => {
+                    searchInput.value = '';
+                    searchClear.style.opacity = '0';
+                    this.filteredTools = this.allTools.filter(tool => tool.category === this.currentCategory);
+                    this.displayTools(this.filteredTools);
+                    searchInput.focus();
+                });
+            }
+
+            showError(message) {
+                const container = document.querySelector('.tabs-container');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+                container.insertBefore(errorDiv, container.firstChild);
+            }
+        }
+
+        // 页面加载完成后初始化工具库
+        document.addEventListener('DOMContentLoaded', () => {
+            new ToolLibrary();
+        });
+    </script>
+</body>
+</html>
