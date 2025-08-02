@@ -479,7 +479,7 @@
                     console.error('加载数据失败:', error);
                     this.showError('无法加载工具数据。请确保 tools.json 文件存在且格式正确。');
                     // 使用默认数据
-                    this.processData(this.getDefaultData());
+                    // this.processData(this.getDefaultData());
                     this.renderTabs();
                     this.switchCategory(this.currentCategory);
                     this.setupEventListeners();
