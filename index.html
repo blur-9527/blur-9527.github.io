@@ -123,6 +123,15 @@
             transform: translateY(-50%);
             color: var(--text-secondary);
             font-size: 1.3rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .search-input:focus + .search-icon,
+        .search-input:not(:placeholder-shown) + .search-icon {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .search-clear {
@@ -135,12 +144,15 @@
             color: var(--text-secondary);
             cursor: pointer;
             opacity: 0;
-            transition: opacity 0.2s ease;
+            visibility: hidden;
+            transition: all 0.3s ease;
             font-size: 1.2rem;
+            z-index: 10;
         }
 
         .search-input:not(:placeholder-shown) ~ .search-clear {
             opacity: 1;
+            visibility: visible;
         }
 
         .tabs-container {
@@ -447,7 +459,144 @@
 
     <script>
         // 工具库数据结构示例（用于本地测试）
-        const mockData = {};
+        const mockData = {
+            "开发工具": [
+                {
+                    "name": "代码格式化",
+                    "description": "在线格式化HTML、CSS、JavaScript代码，支持多种语言语法高亮",
+                    "link": "tools/code-formatter.html",
+                    "icon": "💻"
+                },
+                {
+                    "name": "JSON查看器",
+                    "description": "可视化查看和编辑JSON数据，支持树形结构展开和折叠",
+                    "link": "tools/json-viewer.html",
+                    "icon": "📊"
+                },
+                {
+                    "name": "正则表达式测试",
+                    "description": "在线测试和调试正则表达式，实时预览匹配结果",
+                    "link": "tools/regex-tester.html",
+                    "icon": "🔍"
+                },
+                {
+                    "name": "API测试工具",
+                    "description": "测试RESTful API接口，支持GET、POST、PUT、DELETE方法",
+                    "link": "tools/api-tester.html",
+                    "icon": "📡"
+                },
+                {
+                    "name": "颜色转换器",
+                    "description": "在HEX、RGB、HSL等颜色格式之间进行转换",
+                    "link": "tools/color-converter.html",
+                    "icon": "🎨"
+                }
+            ],
+            "图像处理": [
+                {
+                    "name": "图片压缩",
+                    "description": "在线压缩图片大小，保持质量，支持JPG、PNG、WEBP格式",
+                    "link": "tools/image-compressor.html",
+                    "icon": "🖼️"
+                },
+                {
+                    "name": "颜色提取器",
+                    "description": "从图片中提取主要颜色，生成调色板",
+                    "link": "tools/color-extractor.html",
+                    "icon": "🎨"
+                },
+                {
+                    "name": "图片转Base64",
+                    "description": "将图片转换为Base64编码，方便嵌入代码中",
+                    "link": "tools/image-to-base64.html",
+                    "icon": "🔗"
+                },
+                {
+                    "name": "二维码生成",
+                    "description": "将文本、链接等信息生成二维码，支持自定义样式",
+                    "link": "tools/qr-code-generator.html",
+                    "icon": "📱"
+                }
+            ],
+            "文本工具": [
+                {
+                    "name": "文本对比",
+                    "description": "比较两段文本的差异，高亮显示不同之处",
+                    "link": "tools/text-compare.html",
+                    "icon": "📝"
+                },
+                {
+                    "name": "字符统计",
+                    "description": "统计文本中的字符、单词、行数和阅读时间",
+                    "link": "tools/character-counter.html",
+                    "icon": "🔢"
+                },
+                {
+                    "name": "文本转语音",
+                    "description": "将文本转换为语音播放，支持多种语言和声音",
+                    "link": "tools/text-to-speech.html",
+                    "icon": "🗣️"
+                },
+                {
+                    "name": "Markdown预览",
+                    "description": "实时预览Markdown语法渲染效果",
+                    "link": "tools/markdown-preview.html",
+                    "icon": "📄"
+                }
+            ],
+            "转换工具": [
+                {
+                    "name": "单位转换",
+                    "description": "长度、重量、温度、速度等单位转换，支持100+单位",
+                    "link": "tools/unit-converter.html",
+                    "icon": "🔄"
+                },
+                {
+                    "name": "时间转换",
+                    "description": "时间戳与日期格式相互转换，支持多种时区",
+                    "link": "tools/timestamp-converter.html",
+                    "icon": "⏰"
+                },
+                {
+                    "name": "进制转换",
+                    "description": "在二进制、八进制、十进制、十六进制之间转换",
+                    "link": "tools/base-converter.html",
+                    "icon": "🧮"
+                },
+                {
+                    "name": "文件编码转换",
+                    "description": "在UTF-8、GBK、ISO-8859-1等编码格式之间转换",
+                    "link": "tools/encoding-converter.html",
+                    "icon": "📁"
+                }
+            ],
+            "实用工具": [
+                {
+                    "name": "密码生成器",
+                    "description": "生成安全的随机密码，可自定义长度和字符类型",
+                    "link": "tools/password-generator.html",
+                    "icon": "🔐"
+                },
+                {
+                    "name": "计算器",
+                    "description": "支持基本运算、科学计算和编程计算",
+                    "link": "tools/calculator.html",
+                    "icon": "🧮"
+                },
+                {
+                    "name": "随机数生成",
+                    "description": "生成指定范围内的随机数，支持批量生成",
+                    "link": "tools/random-number.html",
+                    "icon": "🎲"
+                },
+                {
+                    "name": "天气查询",
+                    "description": "查询全球城市天气信息，支持未来预报",
+                    "link": "tools/weather.html",
+                    "icon": "🌤️"
+                }
+            ]
+        };
 
         class ToolLibrary {
             constructor() {
@@ -609,7 +758,13 @@
                     const searchTerm = e.target.value.trim().toLowerCase();
                     
                     // 显示或隐藏清除按钮
-                    searchClear.style.opacity = searchTerm ? '1' : '0';
+                    if (searchTerm) {
+                        searchClear.style.opacity = '1';
+                        searchClear.style.visibility = 'visible';
+                    } else {
+                        searchClear.style.opacity = '0';
+                        searchClear.style.visibility = 'hidden';
+                    }
                     
                     if (searchTerm === '') {
                         // 如果搜索框为空，显示当前类别的所有工具
@@ -627,12 +782,34 @@
                 });
 
                 // 清除搜索
-                searchClear.addEventListener('click', () => {
+                searchClear.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     searchInput.value = '';
                     searchClear.style.opacity = '0';
+                    searchClear.style.visibility = 'hidden';
                     this.filteredTools = this.allTools.filter(tool => tool.category === this.currentCategory);
                     this.displayTools(this.filteredTools);
                     searchInput.focus();
+                });
+
+                // 处理搜索框获得焦点时隐藏搜索图标
+                searchInput.addEventListener('focus', () => {
+                    const searchTerm = searchInput.value.trim();
+                    if (searchTerm === '') {
+                        const searchIcon = document.querySelector('.search-icon');
+                        searchIcon.style.opacity = '0';
+                        searchIcon.style.visibility = 'hidden';
+                    }
+                });
+
+                // 处理搜索框失去焦点时显示搜索图标（如果搜索框为空）
+                searchInput.addEventListener('blur', () => {
+                    const searchTerm = searchInput.value.trim();
+                    if (searchTerm === '') {
+                        const searchIcon = document.querySelector('.search-icon');
+                        searchIcon.style.opacity = '1';
+                        searchIcon.style.visibility = 'visible';
+                    }
                 });
             }
 
